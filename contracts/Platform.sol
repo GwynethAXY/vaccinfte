@@ -4,16 +4,19 @@ pragma solidity >=0.4.21;
 contract Platform {
     struct Manufacturer {
         bytes32 name;
+        bool isValid;
     }
 
     struct HealthcareP {
         bytes32 name; 
+        bool isValid;
     }
 
     struct Individual {
         uint nric;
         bytes32 name;
         bool[2] vaccinesReceived;
+        bool isValid;
     }
 
     uint[] ids;
@@ -25,21 +28,28 @@ contract Platform {
 
     function createManufacturer(bytes32 name) public{
         address id = msg.sender;
-        manufacturers[id] = Manufacturer(name);
+        manufacturers[id] = Manufacturer(name, true);
     }
 
     function createHealthcareP(bytes32 name) public{
         address id = msg.sender;
-        healthcarePs[id] = HealthcareP(name);
+        healthcarePs[id] = HealthcareP(name, true);
     }
 
     function createIndividual(uint nric, bytes32 name) public{
         address id = msg.sender;
-        individuals[id] = Individual(nric, name, [false, false]);
+        individuals[id] = Individual(nric, name, [false, false], true); 
     }
 
     function checkIdentity() public view returns(bytes32){
-
+        if(manufacturers[msg.sender].isValid){
+            return bytes32("Manufacturer");
+        } else if (healthcarePs[msg.sender].isValid){
+            return bytes32("HealthcareP");
+        } else if (individuals[msg.sender].isValid){
+            return bytes32("Individual");
+        }
+        return bytes32("New User");
     }
 
 

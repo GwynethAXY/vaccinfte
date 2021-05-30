@@ -15,6 +15,8 @@ function useGetContractInstance({ web3, contract }) {
       });
     }
   }, [web3, contract]);
+
+  // console.log("platforminstance: " + JSON.stringify(plaformInstance));
   return { plaformInstance };
 }
 
